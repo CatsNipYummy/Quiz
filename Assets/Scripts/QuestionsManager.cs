@@ -79,9 +79,8 @@ public class QuestionsManager : MonoBehaviour {
 			score.text = "Score: " + ScoreManager.incrementScoreBy(10);
 		}
 
-		m_bEnableInput = true;
-
 		yield return new WaitForSeconds(delayTime);
+		m_bEnableInput = true;
 		Application.LoadLevel(Application.loadedLevel);
 	}
 }
