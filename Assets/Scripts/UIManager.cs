@@ -2,20 +2,21 @@
 using System.Collections;
 using UnityEngine.UI;
 
-public class QuestionsManager : MonoBehaviour {
+public class UIManager : MonoBehaviour {
 
 	public Text questionTextField;
-	public Text score;
-	public Button[] options;
+	public Text scoreTextField;
+	public Button[] optionButtons;
 	public GameObject scoreManager;
 
-	public QuestionAndAnswers questionAndAnswers;
+	public int scoreIncrementer;
 
+	private QuestionAndOptions questionAndOptions;
 	private bool m_bEnableInput = true; // Disable button presses after submission
 
 	// Use this for initialization
 	void Start () {
-		setQuestionAndAnswers();
+		setQuestionAndOptions();
 
 		setUI();
 
@@ -25,31 +26,31 @@ public class QuestionsManager : MonoBehaviour {
 	}
 
 	// Set question and answers
-	void setQuestionAndAnswers() {
-		questionAndAnswers = new QuestionAndAnswers();
-		questionAndAnswers.setQuestion("Which year was CMU founded?");
+	void setQuestionAndOptions() {
+		questionAndOptions = new QuestionAndOptions();
+		questionAndOptions.setQuestion("Which year was CMU founded?");
 		
-		questionAndAnswers.setAnswers("1850",
+		questionAndOptions.setOptions("1850",
 		                              "1875",
 		                              "1900",
 		                              "1925");
 		// Set right answer
-		questionAndAnswers.setRightAnswer(3);
+		questionAndOptions.setRightOption(3);
 	}
 
 	// Set values into the UI
 	void setUI () {
 		// Set Score
-		score.text = "Score: " + ScoreManager.score();
+		scoreTextField.text = "Score: " + ScoreManager.score();
 
 		// Set Question Text
-		questionTextField.text = questionAndAnswers.question();
+		questionTextField.text = questionAndOptions.question();
 
 		// Set answer values to the options
-		for (int i = 0; i < questionAndAnswers.answersCount(); i++) {
-			Button gameObj = options[i];
+		for (int i = 0; i < questionAndOptions.optionsCount(); i++) {
+			Button gameObj = optionButtons[i];
 			Text buttonText = gameObj.GetComponentInChildren<Text>();
-			buttonText.text = questionAndAnswers.answerAtIndex(i).ToString();
+			buttonText.text = questionAndOptions.optionAtIndex(i).ToString();
 		}
 	}
 
@@ -58,6 +59,7 @@ public class QuestionsManager : MonoBehaviour {
 		if (m_bEnableInput) {
 			button.image.color = Color.yellow;
 
+			// Find the selected button
 			string option = button.name.Split(' ')[1];
 			StartCoroutine(checkAnswer(option, button, 2.0f));
 
@@ -70,10 +72,10 @@ public class QuestionsManager : MonoBehaviour {
 
 		bool rightAnswer = true;
 
-		for (int i = 0; i < questionAndAnswers.answersCount(); i++) {
-			Button eachButton = options[i] as Button;
+		for (int i = 0; i < questionAndOptions.optionsCount(); i++) {
+			Button eachButton = optionButtons[i] as Button;
 
-			if (i + 1 == questionAndAnswers.rightAnswer()) {
+			if (i + 1 == questionAndOptions.rightOption()) {
 				// Set correct answer to green (not caring about the player's option)
 				eachButton.image.color = Color.green;
 
@@ -89,7 +91,7 @@ public class QuestionsManager : MonoBehaviour {
 
 		// Check if answer is correct
 		if (rightAnswer) {
-			score.text = "Score: " + ScoreManager.incrementScoreBy(10);
+			scoreTextField.text = "Score: " + ScoreManager.incrementScoreBy(scoreIncrementer);
 		}
 
 		yield return new WaitForSeconds(delayTime);
