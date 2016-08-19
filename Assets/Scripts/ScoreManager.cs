@@ -11,9 +11,7 @@ public class ScoreManager : MonoBehaviour {
 		if (instance == null)			
 			instance = this;
 		else if (instance != this)			
-			Destroy(gameObject);    
-		
-		DontDestroyOnLoad(gameObject);
+			Destroy(gameObject);    		
 	}
 
 	public static int incrementScoreBy (int increment) {

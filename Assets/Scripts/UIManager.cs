@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 using System.Collections;
 using UnityEngine.UI;
 
@@ -98,6 +99,6 @@ public class UIManager : MonoBehaviour {
 		// enable button presses
 		m_bEnableInput = true;
 		// reload the scene with the same question
-		Application.LoadLevel(Application.loadedLevel);
+		SceneManager.LoadScene(SceneManager.GetActiveScene().name);
 	}
 }
